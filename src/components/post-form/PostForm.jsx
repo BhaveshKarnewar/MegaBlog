@@ -20,7 +20,6 @@ export default function PostForm({ post }) {
   const userData = useSelector((state) => state.auth.userData);
 
   const submit = async (data) => {
-    console.log(data);
     if (post) {
       const file = data.image[0]
         ? await appwriteService.uploadFile(data.image[0])
@@ -58,7 +57,11 @@ export default function PostForm({ post }) {
 
   const slugTransform = useCallback((value) => {
     if (value && typeof value === "string")
-      return value.trim().toLowerCase().replaceAll(" ", "-");
+      return value
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-zA-Z\d\s]+/g, "-")
+        .replace(/\s/g, "-");
 
     return "";
   }, []);
